@@ -34,6 +34,7 @@ const sbInit = async (cwd: string, flags?: string[], debug?: boolean) => {
   console.log(`🎁 Installing storybook`);
   const env = { STORYBOOK_DISABLE_TELEMETRY: 'true' };
   const fullFlags = ['--yes', ...(flags || [])];
+  console.log(`${sbCliBinaryPath} init ${fullFlags.join(' ')}`, cwd, env, debug);
   await runCommand(`${sbCliBinaryPath} init ${fullFlags.join(' ')}`, { cwd, env }, debug);
 };
 
