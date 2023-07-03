@@ -65,6 +65,7 @@ const getFrameworkPackage = (framework: string, renderer: string, builder: strin
   const storybookBuilder = builder?.replace(/^@storybook\/builder-/, '');
   const storybookFramework = framework?.replace(/^@storybook\//, '');
 
+  console.log('getExternalFramework', builder, framework, externalFramework, storybookFramework, storybookBuilder)
   if (externalFramework === undefined) {
     const frameworkPackage = framework
       ? `@storybook/${storybookFramework}`
