@@ -8,5 +8,5 @@ export const findDistEsm = (cwd: string, relativePath: string) => {
   }
   const packageDir = path.dirname(nearestPackageJson);
 
-  return path.join(packageDir, 'dist', 'esm', relativePath);
+  return path.join(packageDir, 'dist', relativePath);
 };
