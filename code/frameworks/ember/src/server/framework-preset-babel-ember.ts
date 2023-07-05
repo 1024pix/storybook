@@ -1,18 +1,8 @@
 import { findDistFile } from '../util';
 import type { TransformOptions } from '@babel/core';
-import { precompile } from 'ember-source/dist/ember-template-compiler';
 import type { StorybookConfig, Options } from '@storybook/types';
 
 let emberOptions: any;
-
-function precompileWithPlugins(string: string, options: any) {
-  const precompileOptions: any = options;
-  if (emberOptions && emberOptions.polyfills) {
-    precompileOptions.plugins = { ast: emberOptions.polyfills };
-  }
-
-  return precompile(string, precompileOptions);
-}
 
 export function babel(config: TransformOptions, options: Options): TransformOptions {
   if (options && options.presetsList) {
@@ -31,17 +21,24 @@ export function babel(config: TransformOptions, options: Options): TransformOpti
 
   const extraPlugins = [
     [
-      require.resolve('babel-plugin-htmlbars-inline-precompile'),
+      require.resolve('babel-plugin-ember-template-compilation'),
       {
-        precompile: precompileWithPlugins,
-        modules: {
-          'ember-cli-htmlbars': 'hbs',
-          'ember-cli-htmlbars-inline-precompile': 'default',
-          'htmlbars-inline-precompile': 'default',
+        compilerPath: 'ember-source/dist/ember-template-compiler',
+        enableLegacyModules: [
+          'ember-cli-htmlbars'
+          'ember-cli-htmlbars-inline-precompile',
+          'htmlbars-inline-precompile'
+        ],
+        outputModuleOverrides: {
+          '@ember/template-factory': {
+            createTemplateFactory: [
+              'createTemplateFactory',
+              'ember-source/dist/packages/@ember/template-factory/index.js',
+            ],
+          },
         },
       },
     ],
-    [require.resolve('babel-plugin-ember-modules-api-polyfill')],
   ];
 
   return {
